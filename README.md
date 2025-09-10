@@ -91,3 +91,14 @@ Este projeto já inclui `Dockerfile` e `docker-compose.yml` para subir toda a st
 ```bash
     npm run dev
 ```
+
+---
+
+## 🧪 Testes
+
+Este projeto utiliza *Vitest* para testes unitários e de integração.
+
+### Rodando localmente
+1. Instale as dependências de desenvolvimento:
+   ```bash
+   npm install

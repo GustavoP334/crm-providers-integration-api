@@ -11,7 +11,7 @@ export const enqueue = (payload) => {
   });
 };
 
-export const worker = new Worker(
+export const createWorker  = new Worker(
   'provider-updates',
   async (job) => {
     const { providerId, customerId, status, plan, idempotencyKey } = job.data;
@@ -25,3 +25,7 @@ export const worker = new Worker(
   },
   { connection }
 );
+
+if (process.env.NODE_ENV !== 'test') {
+  createWorker();
+}
