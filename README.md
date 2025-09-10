@@ -12,6 +12,14 @@ Inclui:
 
 ---
 
+📄 Documentação do Planejamento da arquitetura:
+
+Acesse: [Planejamento da Arquitetura](docs/arquitetura.pdf)
+
+---
+
+---
+
 📚 Documentação da API
 
 Acesse o Swagger UI:
