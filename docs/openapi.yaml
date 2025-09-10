@@ -1,0 +1,136 @@
+openapi: 3.0.3
+info:
+  title: CRM-Provedores API
+  description: API RESTful para integração entre CRM e provedores
+  version: 1.0.0
+tags:
+  - name: Customers
+    description: Operações relacionadas a clientes do CRM
+  - name: Providers
+    description: Integração com provedores
+
+paths:
+  /customers:
+    get:
+      tags: [Customers]
+      summary: Lista clientes do CRM
+      description: Retorna lista paginada de clientes com dados básicos
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Página a ser retornada
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: Quantidade de registros por página
+      responses:
+        '200':
+          description: Lista de clientes retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        plan:
+                          type: string
+                        status:
+                          type: string
+                          enum: [active, suspended, cancelled]
+                        purchaseDate:
+                          type: string
+                          format: date-time
+                  page:
+                    type: integer
+                  limit:
+                    type: integer
+                  total:
+                    type: integer
+        '400':
+          description: Erro de validação
+        '500':
+          description: Erro interno do servidor
+
+  /providers/{providerId}/customers/{customerId}:
+    patch:
+      tags: [Providers]
+      summary: Atualiza status ou plano de um cliente em um provedor
+      description: Enfileira uma operação de atualização no provedor específico
+      parameters:
+        - name: providerId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Identificador do provedor
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Identificador do cliente no CRM
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+                - plan
+                - idempotencyKey
+              properties:
+                status:
+                  type: string
+                  enum: [active, suspended, cancelled]
+                plan:
+                  type: string
+                idempotencyKey:
+                  type: string
+                  format: uuid
+      responses:
+        '202':
+          description: Operação enfileirada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                  status:
+                    type: string
+                    example: queued
+        '400':
+          description: Erro de validação ou provedor desconhecido
+        '500':
+          description: Erro interno do servidor
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
