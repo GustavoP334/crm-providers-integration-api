@@ -1,6 +1,6 @@
 # CRM Providers Integration API
 
-Backend em **Node.js + Express** para integração entre um sistema **CRM interno** e diferentes **provedores de TV**, permitindo gerenciamento unificado de clientes, planos de assinatura e suporte técnico.
+Backend em **Node.js + Express** para integração entre um sistema **CRM interno** e diferentes **provedores**, permitindo gerenciamento unificado de clientes e planos de assinatura.
 
 Inclui:
 - **API RESTful** com Express
@@ -9,6 +9,13 @@ Inclui:
 - **Banco de dados** PostgreSQL (via Prisma)
 - **Documentação OpenAPI/Swagger**
 - Arquitetura **stateless** e princípios **REST**
+
+---
+
+📚 Documentação da API
+
+Acesse o Swagger UI:
+👉 http://localhost:3000/api-docs
 
 ---
 
@@ -24,12 +31,37 @@ Inclui:
 
 ## 📦 Instalação e execução
 
-### 1. Crie um arquivo .env na raiz:
+### 🔹 Opção 1 — Usando Docker (recomendado)
+
+Este projeto já inclui `Dockerfile` e `docker-compose.yml` para subir toda a stack (API + Redis + Postgres).
+
+### 1. Copie o arquivo `.env.example` para `.env`:
 ```bash
-    PORT=3000
-    NODE_ENV=development
-    REDIS_URL=redis://redis:6379
-    DATABASE_URL=postgresql://user:password@postgres:port/db_name
+   cp .env.example .env
+```
+
+### 2. Suba os containers:
+```bash
+   docker-compose up -d
+```
+
+### 3. Rode as migrações do banco:
+```bash
+   docker-compose exec api npx prisma migrate dev --name init
+```
+
+### 4. Popule o banco com dados utilizando a seed:
+```bash
+   docker-compose exec api npm run seed
+```
+
+---
+
+### 🔹 Opção 2 — Sem Docker (manual)
+
+### 1. Copie o arquivo `.env.example` para `.env`:
+```bash
+    cp .env.example .env
 ```
 
 ### 2. Instale dependências
@@ -42,7 +74,7 @@ Inclui:
     npx prisma migrate dev --name init
 ```
 
-### 4. Execute as seeders do banco
+### 4. Popule o banco com dados utilizando a seed:
 ```bash
     npm run seed
 ```
@@ -51,10 +83,3 @@ Inclui:
 ```bash
     npm run dev
 ```
-
----
-
-📚 Documentação da API
-
-Acesse o Swagger UI:
-👉 http://localhost:3000/api-docs
