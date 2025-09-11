@@ -11,16 +11,14 @@ export const enqueue = (payload) => {
   });
 };
 
-export const createWorker  = new Worker(
+export const createWorker = () => new Worker(
   'provider-updates',
   async (job) => {
     const { providerId, customerId, status, plan, idempotencyKey } = job.data;
     const adapter = adapters.get(providerId);
-    
     if (!adapter) throw new Error(`Provider ${providerId} not supported`);
-
     await adapter.updateCustomer({ customerId, status, plan, idempotencyKey });
-    
+
     console.log(`Job ${job.id} finished for provider ${providerId}, client ${customerId}`);
   },
   { connection }
