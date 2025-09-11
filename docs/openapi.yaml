@@ -10,7 +10,7 @@ tags:
     description: Integração com provedores
 
 paths:
-  /customers:
+  /api/customers:
     get:
       tags: [Customers]
       summary: Lista clientes do CRM
@@ -69,7 +69,7 @@ paths:
         '500':
           description: Erro interno do servidor
 
-  /providers/{providerId}/customers/{customerId}:
+  /api/providers/{providerId}/customers/{customerId}:
     patch:
       tags: [Providers]
       summary: Atualiza status ou plano de um cliente em um provedor
